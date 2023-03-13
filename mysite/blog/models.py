@@ -14,9 +14,14 @@ class Post(models.Model):
     # Define a default sort order
     class Meta:
         # Blog posts are usually displayed in reverse chronological order(from newest to oldest).
-        # Indicate descending order by using a hyphen before the field name, -publish.
+        # Indicate descending order by using a hyphen before the field name, '-publish'.
         # Posts will be returned in reverse chronological order by default.
         ordering = ['-publish']
+        # Define a database index for the 'publish' field.
+        # To improve performance for queries filtering results by this field.
+        indexes = [
+            models.Index(fields=['-publish']),
+        ]
 
     def __str__(self):
         return self.title
