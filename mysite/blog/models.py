@@ -3,13 +3,29 @@ from django.utils import timezone
 
 # Create the Post model to store blog posts in the database.
 class Post(models.Model):
+
+
+    class Status(models.TextChoices):
+        DRAFT = 'DF', 'Draft'
+        PUBLISHED = 'PB', 'Published'
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250)
     body = models.TextField()
+
     # Added datetime fields
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    # Added a status field that will allow us to manage the status of blog posts.
+    # Will be using 'Draft' and 'Published' statuses for posts.
+    # A common functionality for blogs is to save posts as a draft until ready for publication.
+    status = models.CharField(
+        max_length=2,
+        choices=Status.choices,
+        default=Status.DRAFT
+    )
+
     
     # Define a default sort order
     class Meta:
