@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create the Post model to store blog posts in the database.
 class Post(models.Model):
@@ -8,8 +9,22 @@ class Post(models.Model):
     class Status(models.TextChoices):
         DRAFT = 'DF', 'Draft'
         PUBLISHED = 'PB', 'Published'
+
+
     title = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250)
+
+    # Added 'author' field which defined a many-to-one relationship.
+    # Meaning that each post is written by a user, and a user can write any numberof posts.
+    # The 'on_delete' parameter specifies the behavior to adopt when the referenced object is deleted.
+    # Using CASCADE, you specify that when the referenced user is deleted, the database will also delete all related blog posts.
+    # The 'related_name' parameter to specify the name of the reverse relationship, from User to Post. 
+    # This will allow us to access related objects easily from a user object by using the user.blog_posts notatation. 
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='blog_posts'
+    )
     body = models.TextField()
 
     # Added datetime fields
