@@ -2,6 +2,12 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+# Create the custom manager model to retrieve all posts that have a PUBLISHED status.
+class PublishedManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset()\
+                    .filter(status=Post.Status.PUBLISHED)
+
 # Create the Post model to store blog posts in the database.
 class Post(models.Model):
 
@@ -40,6 +46,8 @@ class Post(models.Model):
         choices=Status.choices,
         default=Status.DRAFT
     )
+    objects = models.Manager() # The default manager
+    published = PublishedManager() # Our custom manager
 
     
     # Define a default sort order
