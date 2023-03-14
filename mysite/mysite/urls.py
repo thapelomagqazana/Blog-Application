@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# This 'urlpatterns' list sets up the built-in Django admin site and includes the URL patterns defined within the 'blog' application,
+# allowing users to access both the admin interface and the blog views.
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls', namespace='blog')),
